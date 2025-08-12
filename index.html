@@ -3,20 +3,73 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pwa — PWA + FCM Örnek</title>
-  <link rel="manifest" href="/Pwa/manifest.json">
-  <meta name="theme-color" content="#2b2f77">
+  <title>Pwa — PWA + FCM Bildirim</title>
+  <link rel="manifest" href="/Pwa/manifest.json" />
+  <meta name="theme-color" content="#2b2f77" />
   <style>
-    :root{--accent:#2b2f77;--bg:#f6f7fb}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{display:flex;align-items:center;justify-content:center;background:var(--bg);color:#222}
-    .card{background:white;padding:28px;border-radius:12px;box-shadow:0 6px 20px rgba(10,10,20,.06);width:min(760px,94vw)}
-    header{display:flex;gap:12px;align-items:center}
-    .brand{height:56px;width:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5560a3);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    button{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
-    small{color:#666}
-    .status{margin-top:12px;padding:10px;border-radius:8px;background:#f2f4ff}
-    pre{background:#f8f9ff;padding:12px;border-radius:8px;overflow:auto}
+    :root {
+      --accent: #2b2f77;
+      --bg: #f6f7fb;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      color: #222;
+    }
+    .card {
+      background: white;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(10, 10, 20, .06);
+      width: min(760px, 94vw);
+    }
+    header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .brand {
+      height: 56px;
+      width: 56px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #5560a3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    small {
+      color: #666;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f2f4ff;
+    }
+    pre {
+      background: #f8f9ff;
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      white-space: break-spaces;
+    }
   </style>
 </head>
 <body>
@@ -25,7 +78,7 @@
       <div class="brand">PWA</div>
       <div>
         <h1 style="margin:0">Pwa — PWA + Push (FCM) Örnek</h1>
-        <small>GitHub Pages /Pwa/ — Çevrimdışı + Push bildirimleri (FCM)</small>
+        <small>GitHub Pages /Pwa/ — Çevrimdışı + Bildirim</small>
       </div>
     </header>
 
@@ -40,7 +93,7 @@
 
       <div class="status" id="status">Durum: <strong id="sw-status">başlatılmadı</strong></div>
 
-      <hr style="margin:18px 0">
+      <hr style="margin:18px 0" />
       <h3>Token:</h3>
       <pre id="tokenArea">(henüz alınmadı)</pre>
     </section>
@@ -49,68 +102,67 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 <script>
-const BASE_PATH = '/Pwa/';
-const firebaseConfig = {
-  apiKey: "AIzaSyBFDzKRSLKOqirvZAUCqccTNE_5Y8ZXib4",
-  authDomain: "pwaa-c392e.firebaseapp.com",
-  projectId: "pwaa-c392e",
-  storageBucket: "pwaa-c392e.firebasestorage.app",
-  messagingSenderId: "520233317947",
-  appId: "1:520233317947:web:55b387f893111b9aaa4e1e",
-  measurementId: "G-HFN5T637QC"
-};
-const VAPID_PUBLIC_KEY = 'BGLcs27oqoz_XthD4-LQL-cWhGe9S3N3r1u9R04PzaGx0LBErzn5kg_564D2840-w3n8pPP76-OX2Qa2ruyXLgY';
+  const BASE_PATH = '/Pwa/';
+  const firebaseConfig = {
+    apiKey: "AIzaSyBFDzKRSLKOqirvZAUCqccTNE_5Y8ZXib4",
+    authDomain: "pwaa-c392e.firebaseapp.com",
+    projectId: "pwaa-c392e",
+    storageBucket: "pwaa-c392e.appspot.com",
+    messagingSenderId: "520233317947",
+    appId: "1:520233317947:web:55b387f893111b9aaa4e1e",
+    measurementId: "G-HFN5T637QC"
+  };
+  const VAPID_PUBLIC_KEY = 'BGLcs27oqoz_XthD4-LQL-cWhGe9S3N3r1u9R04PzaGx0LBErzn5kg_564D2840-w3n8pPP76-OX2Qa2ruyXLgY';
 
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
 
-// Butonları yakala
-const btnRequest = document.getElementById('btn-request');
-const btnGetToken = document.getElementById('btn-get-token');
-const btnShowLocal = document.getElementById('btn-show-local');
-const tokenArea = document.getElementById('tokenArea');
+  // Butonları yakala
+  const btnRequest = document.getElementById('btn-request');
+  const btnGetToken = document.getElementById('btn-get-token');
+  const btnShowLocal = document.getElementById('btn-show-local');
+  const tokenArea = document.getElementById('tokenArea');
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        const reg = await navigator.serviceWorker.register(BASE_PATH + 'sw.js');
+        document.getElementById('sw-status').textContent = 'sw.js kayıtlı (scope: ' + reg.scope + ')';
+      } catch (e) {
+        document.getElementById('sw-status').textContent = 'SW kayıt hatası: ' + e;
+      }
+    });
+  }
+
+  btnRequest.addEventListener('click', async () => {
+    const p = await Notification.requestPermission();
+    alert('İzin durumu: ' + p);
+  });
+
+  btnGetToken.addEventListener('click', async () => {
     try {
-      const reg = await navigator.serviceWorker.register(BASE_PATH + 'sw.js');
-      document.getElementById('sw-status').textContent = 'sw.js kayıtlı (scope: ' + reg.scope + ')';
-    } catch (e) {
-      document.getElementById('sw-status').textContent = 'SW kayıt hatası: ' + e;
+      const currentToken = await messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
+      if (currentToken) {
+        tokenArea.textContent = currentToken;
+      } else {
+        tokenArea.textContent = '(Token alınamadı)';
+      }
+    } catch (err) {
+      tokenArea.textContent = 'Hata: ' + err.message;
     }
   });
-}
 
-btnRequest.addEventListener('click', async () => {
-  const p = await Notification.requestPermission();
-  alert('İzin durumu: ' + p);
-});
+  btnShowLocal.addEventListener('click', async () => {
+    const reg = await navigator.serviceWorker.getRegistration(BASE_PATH + 'sw.js');
+    if (reg) reg.showNotification('Yerel Test', { body: 'Bu bir testtir.' });
+  });
 
-btnGetToken.addEventListener('click', async () => {
-  try {
-    const currentToken = await messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
-    if (currentToken) {
-      tokenArea.textContent = currentToken;
-    } else {
-      tokenArea.textContent = '(Token alınamadı)';
-    }
-  } catch (err) {
-    tokenArea.textContent = 'Hata: ' + err;
-  }
-});
-
-btnShowLocal.addEventListener('click', async () => {
-  const reg = await navigator.serviceWorker.getRegistration(BASE_PATH + 'sw.js');
-  if (reg) reg.showNotification('Yerel Test', { body: 'Bu bir testtir.' });
-});
-
-messaging.onMessage(payload => {
-  const title = payload.notification?.title || 'Yeni bildirim';
-  const options = { body: payload.notification?.body || '' };
-  navigator.serviceWorker.getRegistration(BASE_PATH + 'sw.js')
-    .then(reg => reg?.showNotification(title, options));
-});
+  messaging.onMessage(payload => {
+    const title = payload.notification?.title || 'Yeni bildirim';
+    const options = { body: payload.notification?.body || '' };
+    navigator.serviceWorker.getRegistration(BASE_PATH + 'sw.js')
+      .then(reg => reg?.showNotification(title, options));
+  });
 </script>
-
 </body>
 </html>
