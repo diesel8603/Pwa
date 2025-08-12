@@ -64,6 +64,12 @@ const VAPID_PUBLIC_KEY = 'BGLcs27oqoz_XthD4-LQL-cWhGe9S3N3r1u9R04PzaGx0LBErzn5kg
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
+// Butonları yakala
+const btnRequest = document.getElementById('btn-request');
+const btnGetToken = document.getElementById('btn-get-token');
+const btnShowLocal = document.getElementById('btn-show-local');
+const tokenArea = document.getElementById('tokenArea');
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
@@ -82,7 +88,7 @@ btnRequest.addEventListener('click', async () => {
 
 btnGetToken.addEventListener('click', async () => {
   try {
-    const currentToken = await messaging.getToken({vapidKey: VAPID_PUBLIC_KEY});
+    const currentToken = await messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
     if (currentToken) {
       tokenArea.textContent = currentToken;
     } else {
@@ -95,7 +101,7 @@ btnGetToken.addEventListener('click', async () => {
 
 btnShowLocal.addEventListener('click', async () => {
   const reg = await navigator.serviceWorker.getRegistration(BASE_PATH + 'sw.js');
-  if (reg) reg.showNotification('Yerel Test', {body:'Bu bir testtir.'});
+  if (reg) reg.showNotification('Yerel Test', { body: 'Bu bir testtir.' });
 });
 
 messaging.onMessage(payload => {
@@ -105,5 +111,6 @@ messaging.onMessage(payload => {
     .then(reg => reg?.showNotification(title, options));
 });
 </script>
+
 </body>
 </html>
